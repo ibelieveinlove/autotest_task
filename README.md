@@ -116,8 +116,18 @@ def url_checker(url: str):
 ```
 ### 2. Добавлен модуль для работы с файлами, для активаций которого нужно указать верный флаг в терминале -f/-H
 ```py
-    if args.hosts:
+     try:
+        if args.count <= 0: #Проверка верного значения для количества запросов
+            raise ValueError("Аргумент --count должен быть положительным числом.")
+    except ValueError as e:
+        print(f"Ошибка: {e}")
+        sys.exit(1)
+
+    if args.hosts: #Проверка источника данных
         urls = [url.strip() for url in args.hosts.split(',') if url.strip()]
+        if not urls:
+            print("Ошибка: список URL пуст.")
+            sys.exit(1)
         for i in urls:
             if not url_checker(i):
                 print(f"Формат ссылки {i} не верный!")
@@ -130,12 +140,14 @@ def url_checker(url: str):
             print(e)
             sys.exit(1)
 
-    if args.output:
-        fw = file_worker(args.output)
+    if args.output: #Проверка способа экспорта
+        try:
+            fw = file_worker(args.output)
+        except Exception as e:
+            print(f"Ошибка при создании файла: {e}")
+            sys.exit(1)
     else:
         fw = None
-    at = auto_test(cs=args.count, host=urls, fw=fw)
-    await at.make_send()
 ```
 ## Задание повышенной сложности
 ### Программа оптимизирована при помощи использования aiohttp. Сторонней библиотеки, которая функционирует по принципам ассиннхронсти 
