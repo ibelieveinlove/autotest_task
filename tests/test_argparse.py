@@ -3,13 +3,15 @@ import argparse
 import sys
 
 def build_parser():
-    parser = argparse.ArgumentParser(description="Автостестирование сайтов на Python")
-    group = parser.add_mutually_exclusive_group(required=True)
-    group.add_argument('-H', '--hosts', help='URL-адреса через запятую')
-    group.add_argument('-f', '--file', help='Файл с URL-адресами')
-    parser.add_argument('-o', '--output', help='Путь к JSON-файлу')
-    parser.add_argument('-C', '--count', type=int, default=1, help='Количество запросов')
-    return parser
+    agobject = argparse.ArgumentParser(description="Автостестирование сайтов на Python")
+    source_group = agobject.add_mutually_exclusive_group(required=True)
+    source_group.add_argument('-H', '--hosts',
+                              help='URL-адреса через запятую (например, https://ya.ru,https://google.com)')
+    source_group.add_argument('-f', '--file', help='Файл с URL-адресами (по одному на строку)')
+    agobject.add_argument('-o', '--output', help='Путь к JSON-файлу для сохранения результатов/Имя нового JSON файла')
+    agobject.add_argument('-C', '--count', type=int, default=1,
+                          help='Количество запросов к каждому сайту (по умолчанию: 1)')
+    return agobject
 
 def test_invalid_count_exit():
     parser = build_parser()
