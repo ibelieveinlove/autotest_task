@@ -118,7 +118,7 @@ def url_checker(url: str):
 ```py
      try:
         if args.count <= 0: #Проверка верного значения для количества запросов
-            raise ValueError("Аргумент --count должен быть положительным числом.")
+            raise ValueError("Аргумент --count должен быть положительным числом > 0.")
     except ValueError as e:
         print(f"Ошибка: {e}")
         sys.exit(1)
